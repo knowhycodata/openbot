@@ -221,6 +221,9 @@ describe("whether a model has to be driven through the Responses API", () => {
     // An open-weights model a gateway files under `openai/` is not one of OpenAI's own.
     expect(requiresResponsesApi("openai/gpt-oss-20b")).toBe(false);
     expect(requiresResponsesApi("qwen/qwen3-8b")).toBe(false);
+    expect(requiresResponsesApi("qwen/qwen3.8-27b-free")).toBe(false);
+    // `llmtr/` is the catalogue's own prefix, not a provider this box routes on.
+    expect(requiresResponsesApi("llmtr/qwen3-8-27b")).toBe(false);
   });
 });
 

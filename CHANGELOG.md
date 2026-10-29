@@ -62,6 +62,10 @@ Newest first. `Unreleased` is what is on `main` and not yet tagged.
 - Interfaces a Bot drew before the upgrade (A2UI 0.9 surfaces) no longer draw when a conversation is
   reopened; the messages around them stay. New ones use A2UI 1.0 (below).
 
+### LLMTR is a named OpenAI-compatible endpoint
+
+Desktop setup offers LLMTR beside Google and xAI. The row fills `https://llmtr.com/v1` and the free model `qwen/qwen3.8-27b-free`; the key is an ordinary OpenAI-compatible key (`llmtr-...`). A self-hosted deployment sets the same address on `OPENAI_BASE_URL`, leaves `BOT_PROVIDER` as `openai`, and puts the catalogue id in `BOT_MODEL` and in the tenant package's `default_model`. An id such as `llmtr/qwen3-8-27b` is one model name, prefix included. The catalogue is public at `https://llmtr.com/v1/models`.
+
 ### Generated interfaces use A2UI 1.0
 
 With generative UI on, a Bot builds an interface from the A2UI 1.0 basic components instead of the

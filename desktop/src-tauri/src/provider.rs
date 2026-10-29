@@ -1,7 +1,7 @@
 //! The model provider screen's list, as data.
 //!
-//! OpenAI and Anthropic offer plan sign-in alongside API keys. Google and xAI use named endpoint
-//! presets with API keys; their official addresses are supplied by the frontend.
+//! OpenAI and Anthropic offer plan sign-in alongside API keys. Google, xAI and LLMTR use named
+//! endpoint presets with API keys; their official addresses are supplied by the frontend.
 //!
 //! The row that asks for a URL is the last one, and it is the only one that asks. Keeping it there
 //! is what keeps a base URL off the main path, which the audience rule at the top of the build doc
@@ -105,6 +105,15 @@ pub fn catalogue() -> Vec<Provider> {
             caution: None,
         },
         Provider {
+            id: "llmtr".into(),
+            name: "LLMTR".into(),
+            summary: "Use an LLMTR key. The gateway speaks the OpenAI API.".into(),
+            logins: vec![Login::Endpoint],
+            // Unmarked, same as the other endpoint presets: no vendored icon is kept for it.
+            mark: None,
+            caution: None,
+        },
+        Provider {
             id: "openai-compatible".into(),
             name: "Any OpenAI-compatible endpoint".into(),
             summary: "Azure, Bedrock, Mistral, DeepSeek, Ollama, vLLM or your own.".into(),
@@ -129,7 +138,7 @@ mod tests {
             .filter(|p| p.logins.contains(&Login::Endpoint))
             .map(|p| p.id)
             .collect();
-        assert_eq!(asking, vec!["google", "xai", "openai-compatible"]);
+        assert_eq!(asking, vec!["google", "xai", "llmtr", "openai-compatible"]);
         for provider in catalogue()
             .into_iter()
             .filter(|provider| provider.logins.contains(&Login::Endpoint))
@@ -156,12 +165,19 @@ mod tests {
 
     /// Named providers stay ahead of the custom endpoint escape hatch.
     #[test]
-    fn four_named_providers_and_one_custom_endpoint() {
+    fn five_named_providers_and_one_custom_endpoint() {
         let rows = catalogue();
         let ids: Vec<&str> = rows.iter().map(|provider| provider.id.as_str()).collect();
         assert_eq!(
             ids,
-            vec!["openai", "anthropic", "google", "xai", "openai-compatible"]
+            vec![
+                "openai",
+                "anthropic",
+                "google",
+                "xai",
+                "llmtr",
+                "openai-compatible"
+            ]
         );
     }
 

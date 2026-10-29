@@ -164,15 +164,19 @@ describe("a built-in Bot behind a gateway in front of OpenAI", () => {
 });
 
 describe("a built-in Bot on a server that only speaks Chat Completions", () => {
-  test.each(["qwen3:8b", "llama3.1:8b", "openai/gpt-oss-20b"])(
-    "on %s it is asked on Chat Completions, as before",
-    async (model) => {
-      const turn = await oneTurn({ model, responsesApi: false });
-      expect(turn.failure).toBeUndefined();
-      expect(turn.requests).toEqual([{ api: "chat", model, tools: OFFERED }]);
-      expect(turn.answer).toBe(CHAT_ANSWER);
-    },
-  );
+  test.each([
+    "qwen3:8b",
+    "llama3.1:8b",
+    "openai/gpt-oss-20b",
+    // Catalogue ids. `llmtr/` is part of the model name, not a provider to strip.
+    "qwen/qwen3.8-27b-free",
+    "llmtr/qwen3-8-27b",
+  ])("on %s it is asked on Chat Completions, as before", async (model) => {
+    const turn = await oneTurn({ model, responsesApi: false });
+    expect(turn.failure).toBeUndefined();
+    expect(turn.requests).toEqual([{ api: "chat", model, tools: OFFERED }]);
+    expect(turn.answer).toBe(CHAT_ANSWER);
+  });
 });
 
 describe("an operator who chose the API", () => {

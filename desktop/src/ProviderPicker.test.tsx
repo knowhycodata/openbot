@@ -53,6 +53,13 @@ const cloudProviders = [
     model: "grok-4.7",
     keyUrl: "https://console.x.ai/",
   },
+  {
+    id: "llmtr",
+    name: "LLMTR",
+    baseUrl: "https://llmtr.com/v1",
+    model: "qwen/qwen3.8-27b-free",
+    keyUrl: "https://llmtr.com/docs/en/api-keys/",
+  },
 ];
 
 const allProviders: Provider[] = [

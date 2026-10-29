@@ -236,6 +236,28 @@ model:
 
 Most gateways publish a model list, which is the way to check a name before configuring it.
 
+[LLMTR](https://llmtr.com) is one such gateway. One key (`llmtr-...`) fronts the providers it carries, and some of its models run in Turkey. It is not a fourth value of `BOT_PROVIDER`: Anthropic and Google are different APIs, and LLMTR speaks this one, so `BOT_PROVIDER` and the tenant package's `provider` stay `openai`.
+
+```sh
+OPENAI_BASE_URL=https://llmtr.com/v1
+OPENAI_API_KEY=llmtr-...
+BOT_PROVIDER=openai
+BOT_MODEL=qwen/qwen3.8-27b-free
+```
+
+```yaml
+model:
+  provider: openai
+  credential_secret_ref: openai-api-key
+  default_model: qwen/qwen3.8-27b-free
+```
+
+A catalogue id is the whole model name. `llmtr/qwen3-8-27b`, the Turkey-hosted model, is one id: the `llmtr/` stays in `BOT_MODEL` and in `default_model`, and stripping it asks for a model the endpoint does not have. `provider` is still `openai`, which is the half OpenBot puts in front when it calls; the endpoint is asked for `llmtr/qwen3-8-27b`. Both of those ids accept tools and chat completions, which is what a Bot needs to drive its computer. The catalogue is public:
+
+```sh
+curl -s https://llmtr.com/v1/models
+```
+
 Two things are worth knowing before pointing a deployment at any gateway. Not every catalogue entry accepts tools, and a Bot without tool calling cannot drive its computer; the model list says which do. And `BOT_RESPONSES_API=true` needs an endpoint that implements the Responses API, not only chat completions.
 
 The built-in Bots call a gateway's Chat Completions API (`/chat/completions`), which every OpenAI-compatible endpoint serves, unless their model takes tools only through the Responses API: `gpt-5.6` and later, the `-pro` models and `gpt-5.3-codex`, under a gateway's `openai/` name too. For those they call `/responses`, which a gateway or a proxy in front of OpenAI also serves. `COPILOTKIT_OPENAI_API=responses` or `chat` picks one API for every model instead.
